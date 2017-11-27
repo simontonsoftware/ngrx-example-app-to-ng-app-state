@@ -41,20 +41,6 @@ export function reducer(
   action: book.Actions | collection.Actions
 ): State {
   switch (action.type) {
-    case book.SEARCH_COMPLETE: {
-      return {
-        /**
-         * The addMany function provided by the created adapter
-         * adds many records to the entity dictionary
-         * and returns a new state including those records. If
-         * the collection is to be sorted, the adapter will
-         * sort each record upon entry into the sorted array.
-         */
-        ...adapter.addMany(action.payload, state),
-        selectedBookId: state.selectedBookId,
-      };
-    }
-
     case book.LOAD: {
       return {
         /**

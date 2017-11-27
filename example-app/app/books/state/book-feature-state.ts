@@ -3,7 +3,7 @@ import { CollectionState } from './coolection-state';
 import { SearchState } from './search-state';
 
 export class BookFeatureState {
-  search: SearchState;
-  books: BooksState;
-  collection: CollectionState;
+  search = new SearchState();
+  books = new BooksState();
+  collection = new CollectionState();
 }

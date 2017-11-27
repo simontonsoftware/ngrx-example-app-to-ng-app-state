@@ -1,11 +1,9 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import * as fromSearch from './search';
 import * as fromBooks from './books';
 import * as fromCollection from './collection';
 import * as fromRoot from '../../reducers';
 
 export interface BooksState {
-  search: fromSearch.State;
   books: fromBooks.State;
   collection: fromCollection.State;
 }
@@ -15,7 +13,6 @@ export interface State extends fromRoot.State {
 }
 
 export const reducers = {
-  search: fromSearch.reducer,
   books: fromBooks.reducer,
   collection: fromCollection.reducer,
 };
@@ -70,10 +67,7 @@ export const getSelectedBookId = createSelector(
  * in selecting records from the entity state.
  */
 export const {
-  selectIds: getBookIds,
   selectEntities: getBookEntities,
-  selectAll: getAllBooks,
-  selectTotal: getTotalBooks,
 } = fromBooks.adapter.getSelectors(getBookEntitiesState);
 
 export const getSelectedBook = createSelector(
@@ -88,39 +82,6 @@ export const getSelectedBook = createSelector(
  * Just like with the books selectors, we also have to compose the search
  * reducer's and collection reducer's selectors.
  */
-export const getSearchState = createSelector(
-  getBooksState,
-  (state: BooksState) => state.search
-);
-
-export const getSearchBookIds = createSelector(
-  getSearchState,
-  fromSearch.getIds
-);
-export const getSearchQuery = createSelector(
-  getSearchState,
-  fromSearch.getQuery
-);
-export const getSearchLoading = createSelector(
-  getSearchState,
-  fromSearch.getLoading
-);
-export const getSearchError = createSelector(
-  getSearchState,
-  fromSearch.getError
-);
-
-/**
- * Some selector functions create joins across parts of state. This selector
- * composes the search result IDs to return an array of books in the store.
- */
-export const getSearchResults = createSelector(
-  getBookEntities,
-  getSearchBookIds,
-  (books, searchIds) => {
-    return searchIds.map(id => books[id]);
-  }
-);
 
 export const getCollectionState = createSelector(
   getBooksState,
@@ -131,21 +92,9 @@ export const getCollectionLoaded = createSelector(
   getCollectionState,
   fromCollection.getLoaded
 );
-export const getCollectionLoading = createSelector(
-  getCollectionState,
-  fromCollection.getLoading
-);
 export const getCollectionBookIds = createSelector(
   getCollectionState,
   fromCollection.getIds
-);
-
-export const getBookCollection = createSelector(
-  getBookEntities,
-  getCollectionBookIds,
-  (entities, ids) => {
-    return ids.map(id => entities[id]);
-  }
 );
 
 export const isSelectedBookInCollection = createSelector(

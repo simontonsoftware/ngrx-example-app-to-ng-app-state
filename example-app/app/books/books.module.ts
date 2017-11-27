@@ -5,12 +5,12 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { ComponentsModule } from './components';
-import { BookEffects } from './effects/book';
 import { CollectionEffects } from './effects/collection';
 import { BookExistsGuard } from './guards/book-exists';
 import { BookFeatureStore } from './state/book-feature-store';
 import { BookService } from './services/book.service';
 import { CollectionService } from './services/collection.service';
+import { SearchService } from './services/search.service';
 
 import { FindBookPageComponent } from './containers/find-book-page';
 import { ViewBookPageComponent } from './containers/view-book-page';
@@ -51,7 +51,7 @@ import { reducers } from './reducers';
      * All Effects will only be instantiated once regardless of
      * whether they are registered once or multiple times.
      */
-    EffectsModule.forFeature([BookEffects, CollectionEffects]),
+    EffectsModule.forFeature([CollectionEffects]),
   ],
   declarations: [
     FindBookPageComponent,
@@ -64,6 +64,7 @@ import { reducers } from './reducers';
     BookFeatureStore,
     BookService,
     CollectionService,
+    SearchService,
   ],
 })
 export class BooksModule {}

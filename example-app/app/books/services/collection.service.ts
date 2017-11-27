@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Database } from '@ngrx/db';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/withLatestFrom';
 import { Book } from '../models/book';
 import { BookFeatureStore } from '../state/book-feature-store';
 import { BookService } from './book.service';
@@ -15,21 +13,12 @@ export class CollectionService {
   ) {}
 
   getBookCollection$() {
-    return this.store('books')('entities').$
-      .withLatestFrom(this.store('collection')('ids').$)
-      .map(([entities, ids]) => ids.map(id => entities[id]));
+    return this.bookService.getById$(this.store('collection')('ids').$);
   }
 
   load() {
     this.store('collection')('loading').set(true);
-    this.db
-      .query('books')
-      .toArray()
-      .toPromise()
-      .then(this.loadSucceeded.bind(this))
-      .catch(() => {
-        debugger;
-      });
+    this.db.query('books').toArray().subscribe(this.loadSucceeded.bind(this));
   }
 
   private loadSucceeded(books: Book[]) {
