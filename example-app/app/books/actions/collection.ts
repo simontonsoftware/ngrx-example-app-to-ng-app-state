@@ -7,9 +7,6 @@ export const ADD_BOOK_FAIL = '[Collection] Add Book Fail';
 export const REMOVE_BOOK = '[Collection] Remove Book';
 export const REMOVE_BOOK_SUCCESS = '[Collection] Remove Book Success';
 export const REMOVE_BOOK_FAIL = '[Collection] Remove Book Fail';
-export const LOAD = '[Collection] Load';
-export const LOAD_SUCCESS = '[Collection] Load Success';
-export const LOAD_FAIL = '[Collection] Load Fail';
 
 /**
  * Add Book to Collection Actions
@@ -53,32 +50,10 @@ export class RemoveBookFail implements Action {
   constructor(public payload: Book) {}
 }
 
-/**
- * Load Collection Actions
- */
-export class Load implements Action {
-  readonly type = LOAD;
-}
-
-export class LoadSuccess implements Action {
-  readonly type = LOAD_SUCCESS;
-
-  constructor(public payload: Book[]) {}
-}
-
-export class LoadFail implements Action {
-  readonly type = LOAD_FAIL;
-
-  constructor(public payload: any) {}
-}
-
 export type Actions =
   | AddBook
   | AddBookSuccess
   | AddBookFail
   | RemoveBook
   | RemoveBookSuccess
-  | RemoveBookFail
-  | Load
-  | LoadSuccess
-  | LoadFail;
+  | RemoveBookFail;

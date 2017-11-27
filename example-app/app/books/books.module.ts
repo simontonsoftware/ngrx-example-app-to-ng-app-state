@@ -8,6 +8,9 @@ import { ComponentsModule } from './components';
 import { BookEffects } from './effects/book';
 import { CollectionEffects } from './effects/collection';
 import { BookExistsGuard } from './guards/book-exists';
+import { BookFeatureStore } from './state/book-feature-store';
+import { BookService } from './services/book.service';
+import { CollectionService } from './services/collection.service';
 
 import { FindBookPageComponent } from './containers/find-book-page';
 import { ViewBookPageComponent } from './containers/view-book-page';
@@ -56,6 +59,11 @@ import { reducers } from './reducers';
     SelectedBookPageComponent,
     CollectionPageComponent,
   ],
-  providers: [BookExistsGuard],
+  providers: [
+    BookExistsGuard,
+    BookFeatureStore,
+    BookService,
+    CollectionService,
+  ],
 })
 export class BooksModule {}

@@ -41,8 +41,7 @@ export function reducer(
   action: book.Actions | collection.Actions
 ): State {
   switch (action.type) {
-    case book.SEARCH_COMPLETE:
-    case collection.LOAD_SUCCESS: {
+    case book.SEARCH_COMPLETE: {
       return {
         /**
          * The addMany function provided by the created adapter

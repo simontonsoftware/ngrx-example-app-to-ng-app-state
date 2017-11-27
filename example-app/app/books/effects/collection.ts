@@ -32,17 +32,6 @@ export class CollectionEffects {
   });
 
   @Effect()
-  loadCollection$: Observable<Action> = this.actions$
-    .ofType(collection.LOAD)
-    .switchMap(() =>
-      this.db
-        .query('books')
-        .toArray()
-        .map((books: Book[]) => new collection.LoadSuccess(books))
-        .catch(error => of(new collection.LoadFail(error)))
-    );
-
-  @Effect()
   addBookToCollection$: Observable<Action> = this.actions$
     .ofType(collection.ADD_BOOK)
     .map((action: collection.AddBook) => action.payload)

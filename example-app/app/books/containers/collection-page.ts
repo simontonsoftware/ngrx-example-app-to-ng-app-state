@@ -1,11 +1,5 @@
-import 'rxjs/add/operator/let';
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-
-import * as fromBooks from '../reducers';
-import * as collection from '../actions/collection';
-import { Book } from '../models/book';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'bc-collection-page',
@@ -33,13 +27,11 @@ import { Book } from '../models/book';
   ],
 })
 export class CollectionPageComponent implements OnInit {
-  books$: Observable<Book[]>;
+  books$ = this.service.getBookCollection$();
 
-  constructor(private store: Store<fromBooks.State>) {
-    this.books$ = store.select(fromBooks.getBookCollection);
-  }
+  constructor(private service: CollectionService) {}
 
   ngOnInit() {
-    this.store.dispatch(new collection.Load());
+    this.service.load();
   }
 }

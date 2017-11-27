@@ -17,21 +17,6 @@ export function reducer(
   action: collection.Actions
 ): State {
   switch (action.type) {
-    case collection.LOAD: {
-      return {
-        ...state,
-        loading: true,
-      };
-    }
-
-    case collection.LOAD_SUCCESS: {
-      return {
-        loaded: true,
-        loading: false,
-        ids: action.payload.map(book => book.id),
-      };
-    }
-
     case collection.ADD_BOOK_SUCCESS:
     case collection.REMOVE_BOOK_FAIL: {
       if (state.ids.indexOf(action.payload.id) > -1) {
