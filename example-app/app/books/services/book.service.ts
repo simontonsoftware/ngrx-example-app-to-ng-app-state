@@ -16,6 +16,12 @@ export class BookService {
     batch('books')('entities').assign(keyBy(books, book => book.id));
   }
 
+  getSelectedBook$() {
+    return this.store('books')('entities').$
+      .withLatestFrom(this.store('books')('selectedBookId').$)
+      .map(([entities, id]) => (id === undefined ? undefined : entities[id]));
+  }
+
   getById$(ids$: Observable<string[]>) {
     return this.store('books')('entities').$
       .withLatestFrom(ids$)

@@ -2,10 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
 
 import { ComponentsModule } from './components';
-import { CollectionEffects } from './effects/collection';
 import { BookExistsGuard } from './guards/book-exists';
 import { BookFeatureStore } from './state/book-feature-store';
 import { BookService } from './services/book.service';
@@ -42,16 +40,6 @@ import { reducers } from './reducers';
      * the existing state.
      */
     StoreModule.forFeature('books', reducers),
-
-    /**
-     * Effects.forFeature is used to register effects
-     * from feature modules. Effects can be loaded
-     * eagerly or lazily and will be started immediately.
-     *
-     * All Effects will only be instantiated once regardless of
-     * whether they are registered once or multiple times.
-     */
-    EffectsModule.forFeature([CollectionEffects]),
   ],
   declarations: [
     FindBookPageComponent,

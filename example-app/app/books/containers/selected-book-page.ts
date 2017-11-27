@@ -1,10 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-
-import * as fromBooks from '../reducers';
-import * as collection from '../actions/collection';
 import { Book } from '../models/book';
+import { BookService } from '../services/book.service';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'bc-selected-book-page',
@@ -22,18 +20,19 @@ export class SelectedBookPageComponent {
   book$: Observable<Book>;
   isSelectedBookInCollection$: Observable<boolean>;
 
-  constructor(private store: Store<fromBooks.State>) {
-    this.book$ = store.select(fromBooks.getSelectedBook);
-    this.isSelectedBookInCollection$ = store.select(
-      fromBooks.isSelectedBookInCollection
-    );
+  constructor(
+    private bookService: BookService,
+    private collectionService: CollectionService
+  ) {
+    this.book$ = bookService.getSelectedBook$() as Observable<Book>;
+    this.isSelectedBookInCollection$ = collectionService.getIsSelectedBookInCollection$();
   }
 
   addToCollection(book: Book) {
-    this.store.dispatch(new collection.AddBook(book));
+    this.collectionService.addBook(book);
   }
 
   removeFromCollection(book: Book) {
-    this.store.dispatch(new collection.RemoveBook(book));
+    this.collectionService.removeBook(book);
   }
 }

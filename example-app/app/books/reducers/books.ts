@@ -1,8 +1,6 @@
-import { createSelector } from '@ngrx/store';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Book } from '../models/book';
 import * as book from '../actions/book';
-import * as collection from '../actions/collection';
 
 /**
  * @ngrx/entity provides a predefined interface for handling
@@ -36,10 +34,7 @@ export const initialState: State = adapter.getInitialState({
   selectedBookId: null,
 });
 
-export function reducer(
-  state = initialState,
-  action: book.Actions | collection.Actions
-): State {
+export function reducer(state = initialState, action: book.Actions): State {
   switch (action.type) {
     case book.LOAD: {
       return {

@@ -53,11 +53,6 @@ export const getBookEntitiesState = createSelector(
   state => state.books
 );
 
-export const getSelectedBookId = createSelector(
-  getBookEntitiesState,
-  fromBooks.getSelectedId
-);
-
 /**
  * Adapters created with @ngrx/entity generate
  * commonly used selector functions including
@@ -69,14 +64,6 @@ export const getSelectedBookId = createSelector(
 export const {
   selectEntities: getBookEntities,
 } = fromBooks.adapter.getSelectors(getBookEntitiesState);
-
-export const getSelectedBook = createSelector(
-  getBookEntities,
-  getSelectedBookId,
-  (entities, selectedId) => {
-    return selectedId && entities[selectedId];
-  }
-);
 
 /**
  * Just like with the books selectors, we also have to compose the search
@@ -91,16 +78,4 @@ export const getCollectionState = createSelector(
 export const getCollectionLoaded = createSelector(
   getCollectionState,
   fromCollection.getLoaded
-);
-export const getCollectionBookIds = createSelector(
-  getCollectionState,
-  fromCollection.getIds
-);
-
-export const isSelectedBookInCollection = createSelector(
-  getCollectionBookIds,
-  getSelectedBookId,
-  (ids, selected) => {
-    return ids.indexOf(selected) > -1;
-  }
 );
