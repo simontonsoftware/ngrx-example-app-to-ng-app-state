@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Book } from '../models/book';
 import { CollectionService } from '../services/collection.service';
 
 @Component({
@@ -27,11 +29,13 @@ import { CollectionService } from '../services/collection.service';
   ],
 })
 export class CollectionPageComponent implements OnInit {
-  books$ = this.service.getBookCollection$();
+  books$: Observable<Book[]>;
 
-  constructor(private service: CollectionService) {}
+  constructor(private collectionService: CollectionService) {
+    this.books$ = collectionService.getBookCollection$();
+  }
 
   ngOnInit() {
-    this.service.load();
+    this.collectionService.load();
   }
 }
