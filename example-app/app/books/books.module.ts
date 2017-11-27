@@ -16,8 +16,6 @@ import { SelectedBookPageComponent } from './containers/selected-book-page';
 import { CollectionPageComponent } from './containers/collection-page';
 import { MaterialModule } from '../material';
 
-import { reducers } from './reducers';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -34,12 +32,9 @@ import { reducers } from './reducers';
     ]),
 
     /**
-     * StoreModule.forFeature is used for composing state
-     * from feature modules. These modules can be loaded
-     * eagerly or lazily and will be dynamically added to
-     * the existing state.
+     * Required only for interoperability with RouterModule
      */
-    StoreModule.forFeature('books', reducers),
+    StoreModule.forFeature('books', {}),
   ],
   declarations: [
     FindBookPageComponent,

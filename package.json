@@ -118,7 +118,7 @@
     "reflect-metadata": "^0.1.9",
     "rimraf": "^2.5.4",
     "rollup": "^0.50.0",
-    "rxjs": "^5.4.0",
+    "rxjs": "^5.5.2",
     "sorcery": "^0.10.0",
     "ts-node": "^3.1.0",
     "tslib": "1.6.0",
@@ -129,6 +129,8 @@
   },
   "dependencies": {
     "@angular/cdk": "^2.0.0-beta.12",
+    "micro-dash": "^1.1.0",
+    "ng-app-state": "^4.0.0",
     "opencollective": "^1.0.3"
   },
   "collective": {
