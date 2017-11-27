@@ -2,7 +2,6 @@ import { Action } from '@ngrx/store';
 import { Book } from '../models/book';
 
 export const LOAD = '[Book] Load';
-export const SELECT = '[Book] Select';
 
 /**
  * Every action is comprised of at least a type and an optional
@@ -17,14 +16,8 @@ export class Load implements Action {
   constructor(public payload: Book) {}
 }
 
-export class Select implements Action {
-  readonly type = SELECT;
-
-  constructor(public payload: string) {}
-}
-
 /**
  * Export a type alias of all actions in this action group
  * so that reducers can easily compose action types
  */
-export type Actions = Load | Select;
+export type Actions = Load;

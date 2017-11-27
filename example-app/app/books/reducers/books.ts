@@ -1,6 +1,5 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Book } from '../models/book';
-import * as book from '../actions/book';
 
 /**
  * @ngrx/entity provides a predefined interface for handling
@@ -34,33 +33,8 @@ export const initialState: State = adapter.getInitialState({
   selectedBookId: null,
 });
 
-export function reducer(state = initialState, action: book.Actions): State {
-  switch (action.type) {
-    case book.LOAD: {
-      return {
-        /**
-         * The addOne function provided by the created adapter
-         * adds one record to the entity dictionary
-         * and returns a new state including that records if it doesn't
-         * exist already. If the collection is to be sorted, the adapter will
-         * insert the new record into the sorted array.
-         */
-        ...adapter.addOne(action.payload, state),
-        selectedBookId: state.selectedBookId,
-      };
-    }
-
-    case book.SELECT: {
-      return {
-        ...state,
-        selectedBookId: action.payload,
-      };
-    }
-
-    default: {
-      return state;
-    }
-  }
+export function reducer(state = initialState, action: any): State {
+  return state;
 }
 
 /**
