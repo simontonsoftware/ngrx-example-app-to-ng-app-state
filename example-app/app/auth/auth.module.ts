@@ -12,6 +12,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { AuthEffects } from './effects/auth.effects';
 import { reducers } from './reducers';
 import { MaterialModule } from '../material';
+import { AuthStore } from './state/auth-store';
 
 export const COMPONENTS = [LoginPageComponent, LoginFormComponent];
 
@@ -24,7 +25,7 @@ export class AuthModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: RootAuthModule,
-      providers: [AuthService, AuthGuard],
+      providers: [AuthGuard, AuthService, AuthStore],
     };
   }
 }

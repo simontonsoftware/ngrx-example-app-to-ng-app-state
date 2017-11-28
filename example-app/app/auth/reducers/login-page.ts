@@ -41,6 +41,3 @@ export function reducer(state = initialState, action: auth.Actions): State {
     }
   }
 }
-
-export const getError = (state: State) => state.error;
-export const getPending = (state: State) => state.pending;
