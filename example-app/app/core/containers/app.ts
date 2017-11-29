@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 
 import * as fromRoot from '../../reducers';
 import * as fromAuth from '../../auth/reducers';
-import * as layout from '../actions/layout';
 import * as Auth from '../../auth/actions/auth';
 import { LayoutStore } from '../state/layout-store';
 
@@ -45,8 +44,7 @@ export class AppComponent {
     private layoutStore: LayoutStore
   ) {
     /**
-     * Selectors can be applied with the `select` operator which passes the state
-     * tree to the provided selector
+     * To observe parts of the state use `.$`.
      */
     this.showSidenav$ = this.layoutStore('showSidenav').$;
     this.loggedIn$ = this.store.select(fromAuth.getLoggedIn);
@@ -54,16 +52,15 @@ export class AppComponent {
 
   closeSidenav() {
     /**
-     * All state updates are handled through dispatched actions in 'container'
-     * components. This provides a clear, reproducible history of state
-     * updates and user interaction through the life of our
-     * application.
+     * All state updates are handled through the store. This provides a clear,
+     * reproducible history of state updates and user interaction through the
+     * life of our application.
      */
-    this.store.dispatch(new layout.CloseSidenav());
+    this.layoutStore('showSidenav').set(false);
   }
 
   openSidenav() {
-    this.store.dispatch(new layout.OpenSidenav());
+    this.layoutStore('showSidenav').set(true);
   }
 
   logout() {

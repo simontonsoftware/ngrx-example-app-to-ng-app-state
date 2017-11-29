@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
 
 import { AppComponent } from './containers/app';
 import { NotFoundPageComponent } from './containers/not-found-page';
@@ -23,7 +24,13 @@ export const COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, MaterialModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MaterialModule,
+    /** Required only for interoperability with RouterModule */
+    StoreModule.forFeature('layout', {}),
+  ],
   declarations: COMPONENTS,
   exports: COMPONENTS,
   providers: [LayoutStore],
