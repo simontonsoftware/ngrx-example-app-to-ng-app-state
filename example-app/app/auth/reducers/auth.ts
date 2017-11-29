@@ -13,14 +13,6 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: auth.Actions): State {
   switch (action.type) {
-    case auth.LOGIN_SUCCESS: {
-      return {
-        ...state,
-        loggedIn: true,
-        user: action.payload.user,
-      };
-    }
-
     case auth.LOGOUT: {
       return initialState;
     }

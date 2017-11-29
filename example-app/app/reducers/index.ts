@@ -24,6 +24,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
  */
 
 import * as fromLayout from '../core/reducers/layout';
+import { ngAppStateReducer } from 'ng-app-state';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -60,8 +61,8 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
  * that will be composed to form the root meta-reducer.
  */
 export const metaReducers: MetaReducer<State>[] = !environment.production
-  ? [logger, storeFreeze]
-  : [];
+  ? [logger, storeFreeze, ngAppStateReducer]
+  : [ngAppStateReducer];
 
 /**
  * Layout Reducers

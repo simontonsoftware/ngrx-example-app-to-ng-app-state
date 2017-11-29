@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Authenticate } from '../models/user';
-import * as Auth from '../actions/auth';
+import { AuthService } from '../services/auth.service';
 import { AuthStore } from '../state/auth-store';
 
 @Component({
@@ -18,11 +18,11 @@ export class LoginPageComponent implements OnInit {
   pending$ = this.store('loginPage')('pending').$;
   error$ = this.store('loginPage')('error').$;
 
-  constructor(private store: AuthStore) {}
+  constructor(private store: AuthStore, private authService: AuthService) {}
 
   ngOnInit() {}
 
   onSubmit($event: Authenticate) {
-    this.store.dispatch(new Auth.Login($event));
+    this.authService.login($event);
   }
 }

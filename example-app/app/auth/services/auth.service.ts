@@ -1,25 +1,52 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
-import { User, Authenticate } from '../models/user';
+import { Authenticate } from '../models/user';
+import { AuthStore } from '../state/auth-store';
 
 @Injectable()
 export class AuthService {
-  constructor() {}
+  constructor(private store: AuthStore, private router: Router) {}
 
-  login({ username, password }: Authenticate) {
+  login(user: Authenticate) {
+    this.store('loginPage').assign({
+      error: null,
+      pending: true,
+    });
+
     /**
      * Simulate a failed login to display the error
      * message for the login form.
      */
-    if (username !== 'test') {
-      return _throw('Invalid username or password');
+    if (user.username !== 'test') {
+      this.loginFailed();
+    } else {
+      this.loginSucceeded();
     }
-
-    return of({ name: 'User' });
   }
 
   logout() {
     return of(true);
+  }
+
+  private loginSucceeded() {
+    this.store.batch(batch => {
+      batch('loginPage').assign({
+        error: null,
+        pending: false,
+      });
+      batch('status').assign({
+        loggedIn: true,
+        user: { name: 'User' },
+      });
+    });
+    this.router.navigate(['/']);
+  }
+
+  private loginFailed() {
+    this.store('loginPage').assign({
+      error: 'Invalid username or password',
+      pending: false,
+    });
   }
 }
