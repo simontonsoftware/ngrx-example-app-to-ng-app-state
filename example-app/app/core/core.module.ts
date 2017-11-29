@@ -11,6 +11,7 @@ import { ToolbarComponent } from './components/toolbar';
 import { MaterialModule } from '../material';
 
 import { GoogleBooksService } from './services/google-books';
+import { LayoutStore } from './state/layout-store';
 
 export const COMPONENTS = [
   AppComponent,
@@ -25,6 +26,7 @@ export const COMPONENTS = [
   imports: [CommonModule, RouterModule, MaterialModule],
   declarations: COMPONENTS,
   exports: COMPONENTS,
+  providers: [LayoutStore],
 })
 export class CoreModule {
   static forRoot() {

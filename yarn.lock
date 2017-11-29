@@ -5055,6 +5055,10 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
 
+micro-dash@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-1.1.0.tgz#b0ba75965d7f86eccc5a67d4bb95cbfbc31b4ff6"
+
 micromatch@^2.1.5, micromatch@^2.3.11:
   version "2.3.11"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-2.3.11.tgz#86677c97d1720b363431d04d0d15293bd38c1565"
@@ -5237,6 +5241,10 @@ nested-error-stacks@^1.0.0, nested-error-stacks@^1.0.1:
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-1.0.2.tgz#19f619591519f096769a5ba9a86e6eeec823c3cf"
   dependencies:
     inherits "~2.0.1"
+
+ng-app-state@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ng-app-state/-/ng-app-state-4.0.0.tgz#6b0fcce9dea8296dcd505c45cd6d3d279687df8a"
 
 ngrx-store-freeze@^0.2.0:
   version "0.2.0"
@@ -6695,7 +6703,7 @@ rx@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
 
-rxjs@^5.0.0-beta.11, rxjs@^5.4.0:
+rxjs@^5.0.0-beta.11:
   version "5.4.2"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.4.2.tgz#2a3236fcbf03df57bae06fd6972fd99e5c08fcf7"
   dependencies:
