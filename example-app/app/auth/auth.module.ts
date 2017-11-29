@@ -22,7 +22,7 @@ export class AuthModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: RootAuthModule,
-      providers: [AuthGuard, AuthService, AuthStore],
+      providers: [AuthService, AuthGuard, AuthStore],
     };
   }
 }
@@ -31,7 +31,7 @@ export class AuthModule {
   imports: [
     AuthModule,
     RouterModule.forChild([{ path: 'login', component: LoginPageComponent }]),
-    /** Required only for interoperability with RouterModule */
+    /** Required only for interoperability with StoreRouterConnectingModule */
     StoreModule.forFeature('auth', {}),
   ],
 })

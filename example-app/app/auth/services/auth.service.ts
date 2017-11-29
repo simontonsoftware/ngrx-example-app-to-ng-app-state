@@ -8,7 +8,7 @@ import { StatusState } from '../state/status-state';
 export class AuthService {
   constructor(private store: AuthStore, private router: Router) {}
 
-  login(user: Authenticate) {
+  login({ username, password }: Authenticate) {
     this.store('loginPage').assign({
       error: null,
       pending: true,
@@ -18,7 +18,7 @@ export class AuthService {
      * Simulate a failed login to display the error
      * message for the login form.
      */
-    if (user.username !== 'test') {
+    if (username !== 'test') {
       this.loginFailed();
     } else {
       this.loginSucceeded();
