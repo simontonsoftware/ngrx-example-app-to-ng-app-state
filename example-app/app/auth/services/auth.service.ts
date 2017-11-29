@@ -27,6 +27,11 @@ export class AuthService {
 
   logout() {
     this.store('status').set(new StatusState());
+    this.redirectToLogin();
+  }
+
+  redirectToLogin() {
+    this.router.navigate(['/login']);
   }
 
   getLoggedIn$() {
