@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 
 import * as fromRoot from '../../reducers';
 import * as layout from '../actions/layout';
-import * as Auth from '../../auth/actions/auth';
 import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
@@ -68,6 +67,6 @@ export class AppComponent {
   logout() {
     this.closeSidenav();
 
-    this.store.dispatch(new Auth.Logout());
+    this.authService.logout();
   }
 }

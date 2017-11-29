@@ -8,7 +8,6 @@ import { LoginFormComponent } from './components/login-form.component';
 
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/auth-guard.service';
-import { reducers } from './reducers';
 import { MaterialModule } from '../material';
 import { AuthStore } from './state/auth-store';
 
@@ -32,7 +31,8 @@ export class AuthModule {
   imports: [
     AuthModule,
     RouterModule.forChild([{ path: 'login', component: LoginPageComponent }]),
-    StoreModule.forFeature('auth', reducers),
+    /** Required only for interoperability with RouterModule */
+    StoreModule.forFeature('auth', {}),
   ],
 })
 export class RootAuthModule {}

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { of } from 'rxjs/observable/of';
 import { Authenticate } from '../models/user';
 import { AuthStore } from '../state/auth-store';
+import { StatusState } from '../state/status-state';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   logout() {
-    return of(true);
+    this.store('status').set(new StatusState());
   }
 
   getLoggedIn$() {
