@@ -1,22 +1,20 @@
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import * as Auth from '../actions/auth';
-import * as fromAuth from '../reducers';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private store: Store<fromAuth.State>) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean> {
-    return this.store
-      .select(fromAuth.getLoggedIn)
+    return this.authService
+      .getLoggedIn$()
       .map(authed => {
         if (!authed) {
-          this.store.dispatch(new Auth.LoginRedirect());
+          this.router.navigate(['/login']);
           return false;
         }
 

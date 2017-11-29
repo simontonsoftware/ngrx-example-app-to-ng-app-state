@@ -29,6 +29,10 @@ export class AuthService {
     return of(true);
   }
 
+  getLoggedIn$() {
+    return this.store('status')('loggedIn').$;
+  }
+
   private loginSucceeded() {
     this.store.batch(batch => {
       batch('loginPage').assign({

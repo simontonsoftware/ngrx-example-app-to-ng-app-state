@@ -22,5 +22,3 @@ export function reducer(state = initialState, action: auth.Actions): State {
     }
   }
 }
-
-export const getLoggedIn = (state: State) => state.loggedIn;
