@@ -25,10 +25,7 @@ export class CollectionService {
   getIsSelectedBookInCollection$() {
     return this.store('collection')('ids').$
       .withLatestFrom(this.store('books')('selectedBookId').$)
-      .map(([ids, selected]) => {
-        debugger;
-        return selected ? ids.includes(selected) : false;
-      });
+      .map(([ids, selected]) => (selected ? ids.includes(selected) : false));
   }
 
   load() {
