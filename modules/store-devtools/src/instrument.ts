@@ -1,31 +1,14 @@
+import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import { ReducerManagerDispatcher, StateObservable } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import {
-  NgModule,
-  InjectionToken,
-  Injector,
-  ModuleWithProviders,
-} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import {
-  StoreModule,
-  State,
-  StateObservable,
-  ActionsSubject,
-  ScannedActionsSubject,
-  ReducerObservable,
-  ReducerManagerDispatcher,
-  ActionReducerMap,
-  ActionReducerFactory,
-  INITIAL_STATE,
-  INITIAL_REDUCERS,
-  REDUCER_FACTORY,
-} from '@ngrx/store';
-import { StoreDevtools, DevtoolsDispatcher } from './devtools';
-import {
+  INITIAL_OPTIONS,
+  STORE_DEVTOOLS_CONFIG,
   StoreDevtoolsConfig,
   StoreDevtoolsOptions,
-  STORE_DEVTOOLS_CONFIG,
-  INITIAL_OPTIONS,
 } from './config';
+import { DevtoolsDispatcher, StoreDevtools } from './devtools';
 import {
   DevtoolsExtension,
   REDUX_DEVTOOLS_EXTENSION,
@@ -56,19 +39,13 @@ export function createReduxDevtoolsExtension() {
   }
 }
 
-export function createStateObservable(devtools: StoreDevtools) {
+export function createStateObservable(
+  devtools: StoreDevtools
+): Observable<any> {
   return devtools.state;
 }
 
 export function noMonitor(): null {
-  return null;
-}
-
-export function noActionSanitizer(): null {
-  return null;
-}
-
-export function noStateSanitizer(): null {
   return null;
 }
 
@@ -80,14 +57,20 @@ export function createConfig(
   const DEFAULT_OPTIONS: StoreDevtoolsConfig = {
     maxAge: false,
     monitor: noMonitor,
-    actionSanitizer: noActionSanitizer,
-    stateSanitizer: noStateSanitizer,
+    actionSanitizer: undefined,
+    stateSanitizer: undefined,
     name: DEFAULT_NAME,
     serialize: false,
+    logOnly: false,
+    features: false,
   };
 
   let options = typeof _options === 'function' ? _options() : _options;
-  const config = Object.assign({}, DEFAULT_OPTIONS, options);
+  const logOnly = options.logOnly
+    ? { pause: true, export: true, test: true }
+    : false;
+  const features = options.features || logOnly;
+  const config = Object.assign({}, DEFAULT_OPTIONS, { features }, options);
 
   if (config.maxAge && config.maxAge < 2) {
     throw new Error(
