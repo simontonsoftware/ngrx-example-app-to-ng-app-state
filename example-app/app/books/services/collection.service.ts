@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Database } from '@ngrx/db';
 import { pull } from 'micro-dash';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toArray';
-import 'rxjs/add/operator/withLatestFrom';
+import { map, toArray, withLatestFrom } from 'rxjs/operators';
 import { Book } from '../models/book';
 import { BookFeatureStore } from '../state/book-feature-store';
 import { BookService } from './book.service';
@@ -23,14 +21,18 @@ export class CollectionService {
   }
 
   getIsSelectedBookInCollection$() {
-    return this.store('collection')('ids').$
-      .withLatestFrom(this.store('books')('selectedBookId').$)
-      .map(([ids, selected]) => (selected ? ids.includes(selected) : false));
+    return this.store('collection')('ids').$.pipe(
+      withLatestFrom(this.store('books')('selectedBookId').$),
+      map(([ids, selected]) => (selected ? ids.includes(selected) : false))
+    );
   }
 
   load() {
     this.store('collection')('loading').set(true);
-    this.db.query('books').toArray().subscribe(this.loadSucceeded.bind(this));
+    this.db
+      .query('books')
+      .pipe(toArray())
+      .subscribe(this.loadSucceeded.bind(this));
   }
 
   addBook(book: Book) {

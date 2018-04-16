@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { keyBy } from 'micro-dash';
 import { StoreObject } from 'ng-app-state';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/withLatestFrom';
 import { Observable } from 'rxjs/Observable';
+import { map, withLatestFrom } from 'rxjs/operators';
 import { Book } from '../models/book';
 import { BookFeatureState } from '../state/book-feature-state';
 import { BookFeatureStore } from '../state/book-feature-store';
@@ -17,14 +16,16 @@ export class BookService {
   }
 
   getSelectedBook$() {
-    return this.store('books')('entities').$
-      .withLatestFrom(this.store('books')('selectedBookId').$)
-      .map(([entities, id]) => (id === undefined ? undefined : entities[id]));
+    return this.store('books')('entities').$.pipe(
+      withLatestFrom(this.store('books')('selectedBookId').$),
+      map(([entities, id]) => (id === undefined ? undefined : entities[id]))
+    );
   }
 
   getById$(ids$: Observable<string[]>) {
-    return this.store('books')('entities').$
-      .withLatestFrom(ids$)
-      .map(([entities, ids]) => ids.map(id => entities[id]));
+    return this.store('books')('entities').$.pipe(
+      withLatestFrom(ids$),
+      map(([entities, ids]) => ids.map(id => entities[id]))
+    );
   }
 }
