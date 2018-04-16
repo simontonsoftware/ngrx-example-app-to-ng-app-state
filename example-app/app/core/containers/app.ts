@@ -1,11 +1,10 @@
-import 'rxjs/add/operator/let';
-import { Observable } from 'rxjs/Observable';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
-import * as fromRoot from '../../reducers';
+import * as AuthActions from '../../auth/actions/auth';
 import * as fromAuth from '../../auth/reducers';
-import * as Auth from '../../auth/actions/auth';
+import * as fromRoot from '../../reducers';
 import { LayoutStore } from '../state/layout-store';
 
 @Component({
@@ -66,6 +65,6 @@ export class AppComponent {
   logout() {
     this.closeSidenav();
 
-    this.store.dispatch(new Auth.Logout());
+    this.store.dispatch(new AuthActions.Logout());
   }
 }

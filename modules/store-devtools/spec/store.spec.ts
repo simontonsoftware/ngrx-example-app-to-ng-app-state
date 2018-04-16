@@ -1,20 +1,17 @@
-import 'rxjs/add/operator/take';
-import { Subscription } from 'rxjs/Subscription';
-import { ReflectiveInjector } from '@angular/core';
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import {
-  StoreModule,
-  Store,
-  StateObservable,
-  ActionReducer,
   Action,
+  ActionReducer,
   ReducerManager,
+  StateObservable,
+  Store,
+  StoreModule,
 } from '@ngrx/store';
+
 import {
+  LiftedState,
   StoreDevtools,
   StoreDevtoolsModule,
-  LiftedState,
-  StoreDevtoolsConfig,
   StoreDevtoolsOptions,
 } from '../';
 import { IS_EXTENSION_OR_MONITOR_PRESENT } from '../src/instrument';
@@ -146,7 +143,7 @@ describe('Store Devtools', () => {
       fixture.cleanup();
     });
 
-    it("should alias devtools unlifted state to Store's state", () => {
+    it(`should alias devtools unlifted state to Store's state`, () => {
       expect(devtools.state).toBe(fixture.state as any);
     });
 
@@ -257,6 +254,16 @@ describe('Store Devtools', () => {
 
       devtools.jumpToState(4);
       expect(getState()).toBe(2);
+    });
+
+    it('should jump to action', () => {
+      store.dispatch({ type: 'INCREMENT' });
+      store.dispatch({ type: 'DECREMENT' });
+      store.dispatch({ type: 'INCREMENT' });
+      expect(getState()).toBe(1);
+
+      devtools.jumpToAction(2);
+      expect(getState()).toBe(0);
     });
 
     it('should replace the reducer and preserve previous states', () => {
