@@ -1,10 +1,9 @@
-import 'rxjs/add/operator/let';
-import { Observable } from 'rxjs/Observable';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import * as fromRoot from '../../reducers';
-import * as layout from '../actions/layout';
+import * as LayoutActions from '../actions/layout';
 import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
@@ -46,7 +45,7 @@ export class AppComponent {
      * Selectors can be applied with the `select` operator which passes the state
      * tree to the provided selector
      */
-    this.showSidenav$ = this.store.select(fromRoot.getShowSidenav);
+    this.showSidenav$ = this.store.pipe(select(fromRoot.getShowSidenav));
     this.loggedIn$ = this.authService.getLoggedIn$();
   }
 
@@ -57,11 +56,11 @@ export class AppComponent {
      * updates and user interaction through the life of our
      * application.
      */
-    this.store.dispatch(new layout.CloseSidenav());
+    this.store.dispatch(new LayoutActions.CloseSidenav());
   }
 
   openSidenav() {
-    this.store.dispatch(new layout.OpenSidenav());
+    this.store.dispatch(new LayoutActions.OpenSidenav());
   }
 
   logout() {

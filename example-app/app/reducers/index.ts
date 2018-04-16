@@ -32,7 +32,7 @@ import { ngAppStateReducer } from 'ng-app-state';
  */
 export interface State {
   layout: fromLayout.State;
-  routerReducer: fromRouter.RouterReducerState<RouterStateUrl>;
+  router: fromRouter.RouterReducerState<RouterStateUrl>;
 }
 
 /**
@@ -42,7 +42,7 @@ export interface State {
  */
 export const reducers: ActionReducerMap<State> = {
   layout: fromLayout.reducer,
-  routerReducer: fromRouter.routerReducer,
+  router: fromRouter.routerReducer,
 };
 
 // console.log all actions
