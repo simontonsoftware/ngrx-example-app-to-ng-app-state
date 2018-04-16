@@ -59,6 +59,10 @@ export async function bundleFesms(config: Config) {
   await mapAsync(pkgs, async pkg => {
     const topLevelName = util.getTopLevelName(pkg);
 
+    if (!util.shouldBundle(config, topLevelName)) {
+      return;
+    }
+
     await util.exec('rollup', [
       `-i ./dist/packages/${pkg}/index.js`,
       `-o ./dist/${topLevelName}/${config.scope}/${pkg}.js`,
@@ -81,6 +85,10 @@ export async function downLevelFesmsToES5(config: Config) {
   await mapAsync(packages, async pkg => {
     const topLevelName = util.getTopLevelName(pkg);
 
+    if (!util.shouldBundle(config, topLevelName)) {
+      return;
+    }
+
     const file = `./dist/${topLevelName}/${config.scope}/${pkg}.js`;
     const target = `./dist/${topLevelName}/${config.scope}/${pkg}.es5.ts`;
 
@@ -99,9 +107,18 @@ export async function downLevelFesmsToES5(config: Config) {
 export async function createUmdBundles(config: Config) {
   await mapAsync(util.getAllPackages(config), async pkg => {
     const topLevelName = util.getTopLevelName(pkg);
+
+    if (!util.shouldBundle(config, topLevelName)) {
+      return;
+    }
+
     const destinationName = util.getDestinationName(pkg);
 
-    const rollupArgs = [`-c ./modules/${pkg}/rollup.config.js`, `--sourcemap`];
+    const rollupArgs = [
+      `-c ./modules/${pkg}/rollup.config.js`,
+      `--sourcemap`,
+      `--amd.id ${config.scope}/${pkg}`,
+    ];
 
     await util.exec('rollup', rollupArgs);
     await util.mapSources(
@@ -123,11 +140,42 @@ export async function cleanTypeScriptFiles(config: Config) {
 }
 
 /**
+ * Removes any leftover Javascript files from previous compilation steps,
+ * leaving the bundles and FESM in place
+ */
+export async function cleanJavaScriptFiles(config: Config) {
+  const packages = util
+    .getTopLevelPackages(config)
+    .filter(pkg => !util.shouldBundle(config, pkg));
+  const jsFilesGlob = './dist/packages/**/*.js';
+  const jsExcludeFilesFlob = [
+    './dist/packages/(bundles|@ngrx)/**/*.js',
+    './dist/**/((?-)testing)/**/*.js',
+  ];
+  const filesToRemove = await util.getListOfFiles(
+    jsFilesGlob,
+    jsExcludeFilesFlob
+  );
+
+  const filteredFilesToRemove = filesToRemove.filter((file: string) =>
+    packages.some(pkg => file.indexOf(pkg) === -1)
+  );
+
+  await mapAsync(filteredFilesToRemove, util.remove);
+}
+
+/**
  * Renames the index files in each package to the name
  * of the package.
  */
 export async function renamePackageEntryFiles(config: Config) {
   await mapAsync(util.getAllPackages(config), async pkg => {
+    const topLevelName = util.getTopLevelName(pkg);
+
+    if (!util.shouldBundle(config, topLevelName)) {
+      return;
+    }
+
     const bottomLevelName = util.getBottomLevelName(pkg);
 
     const files = await util.getListOfFiles(`./dist/packages/${pkg}/index.**`);
@@ -178,6 +226,11 @@ export async function minifyUmdBundles(config: Config) {
 
   await mapAsync(util.getAllPackages(config), async pkg => {
     const topLevelName = util.getTopLevelName(pkg);
+
+    if (!util.shouldBundle(config, topLevelName)) {
+      return;
+    }
+
     const destinationName = util.getDestinationName(pkg);
     const file = `./dist/${topLevelName}/bundles/${destinationName}.umd.js`;
     const out = `./dist/${topLevelName}/bundles/${destinationName}.umd.min.js`;
@@ -228,6 +281,13 @@ export async function removePackagesFolder(config: Config) {
 }
 
 /**
+ * Removes the ngsummary files
+ */
+export function removeSummaryFiles() {
+  return util.exec('rimraf', ['**/dist/**/*.ngsummary.json']);
+}
+
+/**
  * Deploy build artifacts to repos
  */
 export async function publishToRepo(config: Config) {
@@ -272,4 +332,29 @@ export function mapAsync<T>(
   mapFn: (v: T, i: number) => Promise<any>
 ) {
   return Promise.all(list.map(mapFn));
+}
+
+/**
+ * Copy schematics files
+ */
+export async function copySchematicFiles(config: Config) {
+  const packages = util
+    .getTopLevelPackages(config)
+    .filter(pkg => !util.shouldBundle(config, pkg));
+
+  const collectionFiles = await util.getListOfFiles(
+    `./modules/?(${packages.join('|')})/collection.json`
+  );
+  const schemaFiles = await util.getListOfFiles(
+    `./modules/?(${packages.join('|')})/src/*/schema.*`
+  );
+  const templateFiles = await util.getListOfFiles(
+    `./modules/?(${packages.join('|')})/src/*/files/*`
+  );
+  const files = [...collectionFiles, ...schemaFiles, ...templateFiles];
+
+  await mapAsync(files, async file => {
+    const target = file.replace('modules/', 'dist/');
+    await util.copy(file, target);
+  });
 }

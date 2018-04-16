@@ -25,9 +25,8 @@ export function createUnsortedStateAdapter<T>(selectId: IdSelector<T>): any {
   function addManyMutably(entities: any[], state: any): DidMutate {
     let didMutate = false;
 
-    for (let index in entities) {
-      didMutate =
-        addOneMutably(entities[index], state) !== DidMutate.None || didMutate;
+    for (const entity of entities) {
+      didMutate = addOneMutably(entity, state) !== DidMutate.None || didMutate;
     }
 
     return didMutate ? DidMutate.Both : DidMutate.None;
@@ -123,6 +122,40 @@ export function createUnsortedStateAdapter<T>(selectId: IdSelector<T>): any {
     return DidMutate.None;
   }
 
+  function upsertOneMutably(entity: T, state: R): DidMutate;
+  function upsertOneMutably(entity: any, state: any): DidMutate {
+    return upsertManyMutably([entity], state);
+  }
+
+  function upsertManyMutably(entities: T[], state: R): DidMutate;
+  function upsertManyMutably(entities: any[], state: any): DidMutate {
+    const added: any[] = [];
+    const updated: any[] = [];
+
+    for (const entity of entities) {
+      const id = selectId(entity);
+      if (id in state.entities) {
+        updated.push({ id, changes: entity });
+      } else {
+        added.push(entity);
+      }
+    }
+
+    const didMutateByUpdated = updateManyMutably(updated, state);
+    const didMutateByAdded = addManyMutably(added, state);
+
+    switch (true) {
+      case didMutateByAdded === DidMutate.None &&
+        didMutateByUpdated === DidMutate.None:
+        return DidMutate.None;
+      case didMutateByAdded === DidMutate.Both ||
+        didMutateByUpdated === DidMutate.Both:
+        return DidMutate.Both;
+      default:
+        return DidMutate.EntitiesOnly;
+    }
+  }
+
   return {
     removeAll,
     addOne: createStateOperator(addOneMutably),
@@ -130,6 +163,8 @@ export function createUnsortedStateAdapter<T>(selectId: IdSelector<T>): any {
     addAll: createStateOperator(addAllMutably),
     updateOne: createStateOperator(updateOneMutably),
     updateMany: createStateOperator(updateManyMutably),
+    upsertOne: createStateOperator(upsertOneMutably),
+    upsertMany: createStateOperator(upsertManyMutably),
     removeOne: createStateOperator(removeOneMutably),
     removeMany: createStateOperator(removeManyMutably),
   };
