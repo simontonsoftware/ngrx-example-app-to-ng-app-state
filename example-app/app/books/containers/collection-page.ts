@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-
-import * as CollectionActions from '../actions/collection';
+import { Observable } from 'rxjs/Observable';
 import { Book } from '../models/book';
-import * as fromBooks from '../reducers';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'bc-collection-page',
@@ -34,11 +31,11 @@ import * as fromBooks from '../reducers';
 export class CollectionPageComponent implements OnInit {
   books$: Observable<Book[]>;
 
-  constructor(private store: Store<fromBooks.State>) {
-    this.books$ = store.pipe(select(fromBooks.getBookCollection));
+  constructor(private collectionService: CollectionService) {
+    this.books$ = collectionService.getBookCollection$();
   }
 
   ngOnInit() {
-    this.store.dispatch(new CollectionActions.Load());
+    this.collectionService.load();
   }
 }

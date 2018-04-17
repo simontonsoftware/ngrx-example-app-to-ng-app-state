@@ -2,20 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
 
 import { ComponentsModule } from './components';
-import { BookEffects } from './effects/book';
-import { CollectionEffects } from './effects/collection';
 import { BookExistsGuard } from './guards/book-exists';
+import { BookFeatureStore } from './state/book-feature-store';
+import { BookService } from './services/book.service';
+import { CollectionService } from './services/collection.service';
+import { SearchService } from './services/search.service';
 
 import { FindBookPageComponent } from './containers/find-book-page';
 import { ViewBookPageComponent } from './containers/view-book-page';
 import { SelectedBookPageComponent } from './containers/selected-book-page';
 import { CollectionPageComponent } from './containers/collection-page';
 import { MaterialModule } from '../material';
-
-import { reducers } from './reducers';
 
 @NgModule({
   imports: [
@@ -33,22 +32,9 @@ import { reducers } from './reducers';
     ]),
 
     /**
-     * StoreModule.forFeature is used for composing state
-     * from feature modules. These modules can be loaded
-     * eagerly or lazily and will be dynamically added to
-     * the existing state.
+     * Required only for interoperability with RouterModule
      */
-    StoreModule.forFeature('books', reducers),
-
-    /**
-     * Effects.forFeature is used to register effects
-     * from feature modules. Effects can be loaded
-     * eagerly or lazily and will be started immediately.
-     *
-     * All Effects will only be instantiated once regardless of
-     * whether they are registered once or multiple times.
-     */
-    EffectsModule.forFeature([BookEffects, CollectionEffects]),
+    StoreModule.forFeature('books', {}),
   ],
   declarations: [
     FindBookPageComponent,
@@ -56,6 +42,12 @@ import { reducers } from './reducers';
     SelectedBookPageComponent,
     CollectionPageComponent,
   ],
-  providers: [BookExistsGuard],
+  providers: [
+    BookExistsGuard,
+    BookFeatureStore,
+    BookService,
+    CollectionService,
+    SearchService,
+  ],
 })
 export class BooksModule {}
