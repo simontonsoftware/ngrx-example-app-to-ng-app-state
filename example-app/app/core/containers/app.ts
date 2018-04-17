@@ -1,11 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import * as AuthActions from '../../auth/actions/auth';
-import * as fromAuth from '../../auth/reducers';
-import * as fromRoot from '../../reducers';
 import { LayoutStore } from '../state/layout-store';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'bc-app',
@@ -39,14 +36,14 @@ export class AppComponent {
   loggedIn$: Observable<boolean>;
 
   constructor(
-    private store: Store<fromRoot.State>,
+    private authService: AuthService,
     private layoutStore: LayoutStore
   ) {
     /**
      * To observe parts of the state use `.$`.
      */
     this.showSidenav$ = this.layoutStore('showSidenav').$;
-    this.loggedIn$ = this.store.select(fromAuth.getLoggedIn);
+    this.loggedIn$ = this.authService.getLoggedIn$();
   }
 
   closeSidenav() {
@@ -65,6 +62,6 @@ export class AppComponent {
   logout() {
     this.closeSidenav();
 
-    this.store.dispatch(new AuthActions.Logout());
+    this.authService.logout();
   }
 }
